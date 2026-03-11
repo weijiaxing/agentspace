@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { AgentState, ChatMessage } from '@/lib/types';
+import type { AgentState, AvatarMode, ChatMessage } from '@/lib/types';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 
 const initialMessages: ChatMessage[] = [
@@ -15,11 +15,13 @@ const initialMessages: ChatMessage[] = [
 export function ChatPanel({
   state,
   selected,
+  avatarMode,
   onFocusAgent,
   onStateChange
 }: {
   state: AgentState;
   selected: boolean;
+  avatarMode: AvatarMode;
   onFocusAgent: () => void;
   onStateChange: (state: AgentState) => void;
 }) {
@@ -100,6 +102,10 @@ export function ChatPanel({
             <p>{selected ? 'Andy is active in the scene.' : 'Click the button to focus the avatar in the 3D room.'}</p>
           </div>
           <button onClick={onFocusAgent}>{selected ? 'Refocus' : 'Focus Andy'}</button>
+        </div>
+        <div className="metaRow">
+          <span className="metaPill">Avatar: {avatarMode === 'glb' ? 'GLB model' : 'Placeholder'}</span>
+          <span className="metaPill">State: {state}</span>
         </div>
       </div>
 

@@ -1,14 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SceneView } from '@/components/scene/SceneView';
 import { ChatPanel } from '@/components/chat/ChatPanel';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import type { AgentState } from '@/lib/types';
+import type { AgentState, AvatarMode } from '@/lib/types';
 
 export default function HomePage() {
   const [state, setState] = useState<AgentState>('idle');
   const [selected, setSelected] = useState(true);
+
+  const avatarMode = useMemo<AvatarMode>(() => {
+    return process.env.NEXT_PUBLIC_AGENT_MODEL_ENABLED === 'true' ? 'glb' : 'placeholder';
+  }, []);
 
   return (
     <main className="page">
@@ -21,7 +25,7 @@ export default function HomePage() {
           <div className="statusCard">
             <StatusBadge state={state} />
             <p style={{ maxWidth: 260 }}>
-              Click Andy to focus the assistant. This MVP already has a live scene, chat panel, and mock backend.
+              Click Andy to focus the assistant. This MVP already has a live scene, chat panel, and configurable backend.
             </p>
           </div>
         </div>
@@ -35,11 +39,18 @@ export default function HomePage() {
         <SceneView
           state={state}
           selected={selected}
+          avatarMode={avatarMode}
           onSelect={() => setSelected(true)}
           onBackgroundSelect={() => setSelected(false)}
         />
       </section>
-      <ChatPanel state={state} selected={selected} onFocusAgent={() => setSelected(true)} onStateChange={setState} />
+      <ChatPanel
+        state={state}
+        selected={selected}
+        avatarMode={avatarMode}
+        onFocusAgent={() => setSelected(true)}
+        onStateChange={setState}
+      />
     </main>
   );
 }
