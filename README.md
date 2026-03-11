@@ -13,6 +13,7 @@ This version includes:
 - A chat panel
 - Agent state display: idle / thinking / replying
 - A backend abstraction that supports `mock` mode and `openai-compatible` mode
+- GLB model support with placeholder fallback
 
 ## Stack
 
@@ -55,3 +56,15 @@ AGENT_BACKEND_MODEL=gpt-4o-mini
 ```
 
 This can later be replaced with a dedicated OpenClaw bridge or any custom agent service.
+
+## 3D model
+
+To replace the placeholder avatar with a real model, add:
+
+```bash
+public/models/andy.glb
+```
+
+Behavior:
+- If the model exists and loads, Agent Space renders the GLB avatar.
+- If not, it falls back to the built-in placeholder avatar.
