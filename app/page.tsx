@@ -8,6 +8,7 @@ import type { AgentState } from '@/lib/types';
 
 export default function HomePage() {
   const [state, setState] = useState<AgentState>('idle');
+  const [selected, setSelected] = useState(true);
 
   return (
     <main className="page">
@@ -19,12 +20,26 @@ export default function HomePage() {
           </div>
           <div className="statusCard">
             <StatusBadge state={state} />
-            <p style={{ maxWidth: 240 }}>Click Andy to focus the assistant. Chat lives on the right.</p>
+            <p style={{ maxWidth: 260 }}>
+              Click Andy to focus the assistant. This MVP already has a live scene, chat panel, and mock backend.
+            </p>
           </div>
         </div>
-        <SceneView state={state} onSelect={() => setState('idle')} />
+
+        {!selected ? (
+          <button className="focusHint" onClick={() => setSelected(true)}>
+            Focus Andy
+          </button>
+        ) : null}
+
+        <SceneView
+          state={state}
+          selected={selected}
+          onSelect={() => setSelected(true)}
+          onBackgroundSelect={() => setSelected(false)}
+        />
       </section>
-      <ChatPanel state={state} onStateChange={setState} />
+      <ChatPanel state={state} selected={selected} onFocusAgent={() => setSelected(true)} onStateChange={setState} />
     </main>
   );
 }

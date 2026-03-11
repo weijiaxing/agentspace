@@ -8,12 +8,13 @@ html, body {
   color: #e6eef8;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+body { overflow: hidden; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea { font: inherit; }
 
 .page {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr 380px;
   min-height: 100vh;
   background:
     radial-gradient(circle at top left, rgba(42, 106, 255, 0.22), transparent 28%),
@@ -37,16 +38,20 @@ button, input, textarea { font: inherit; }
   align-items: center;
   z-index: 10;
   pointer-events: none;
+  gap: 16px;
 }
 
-.brand, .statusCard {
+.brand, .statusCard, .focusHint {
   pointer-events: auto;
   background: rgba(7, 17, 31, 0.68);
   border: 1px solid rgba(148, 163, 184, 0.16);
   backdrop-filter: blur(12px);
   border-radius: 16px;
-  padding: 14px 16px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.brand, .statusCard {
+  padding: 14px 16px;
 }
 
 .brand h1 {
@@ -54,10 +59,21 @@ button, input, textarea { font: inherit; }
   font-size: 20px;
 }
 
-.brand p, .statusCard p {
+.brand p, .statusCard p, .agentCard p {
   margin: 6px 0 0;
   color: #8ea3b8;
   font-size: 13px;
+  line-height: 1.45;
+}
+
+.focusHint {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  z-index: 10;
+  color: #e6eef8;
+  padding: 10px 14px;
+  cursor: pointer;
 }
 
 .panel {
@@ -79,10 +95,45 @@ button, input, textarea { font: inherit; }
   font-size: 18px;
 }
 
-.panelHeader p {
-  margin: 8px 0 0;
-  color: #8ea3b8;
-  font-size: 13px;
+.panelHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.agentCard {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.agentCard.selected {
+  border-color: rgba(34, 211, 238, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.15);
+}
+
+.agentCard button,
+.inputWrap button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.agentCard button:disabled,
+.inputWrap button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .messages {
@@ -113,6 +164,11 @@ button, input, textarea { font: inherit; }
   border: 1px solid rgba(148, 163, 184, 0.1);
 }
 
+.message.ghost {
+  opacity: 0.82;
+  font-style: italic;
+}
+
 .inputWrap {
   padding: 16px;
   border-top: 1px solid rgba(148, 163, 184, 0.14);
@@ -130,14 +186,8 @@ button, input, textarea { font: inherit; }
   outline: none;
 }
 
-.inputWrap button {
-  border: 0;
-  border-radius: 12px;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #06b6d4, #2563eb);
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
+.inputWrap input:disabled {
+  opacity: 0.72;
 }
 
 .badge {
@@ -149,6 +199,7 @@ button, input, textarea { font: inherit; }
   font-size: 12px;
   background: rgba(148, 163, 184, 0.12);
   color: #d7e3f0;
+  white-space: nowrap;
 }
 
 .dot {
@@ -165,11 +216,30 @@ button, input, textarea { font: inherit; }
 }
 
 @media (max-width: 980px) {
+  body {
+    overflow: auto;
+  }
+
   .page {
     grid-template-columns: 1fr;
   }
 
+  .viewport {
+    min-height: 55vh;
+  }
+
   .panel {
     min-height: 45vh;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .panelHeaderRow,
+  .agentCard {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
